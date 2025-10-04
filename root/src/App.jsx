@@ -19,7 +19,8 @@ function Navbar() {
     <nav className="fixed top-0 left-0 w-full z-50 bg-black/60 backdrop-blur-md shadow-md">
       <div className="max-w-6xl mx-auto flex items-center justify-between p-4">
         <div className="flex items-center gap-3">
-          <img src="/logo.png" alt="Crypt Chat Logo" className="w-26.5 h-10 rounded" />
+          <img src="root/public/logo.png" alt="Crypt Chat Logo" className="w-26.5 h-10 rounded" />
+       
         </div>
         <ul className="hidden sm:flex items-center gap-6 text-gray-300 font-medium">
           <li><a href="#news" className="hover:text-green-400">News</a></li>
@@ -76,9 +77,7 @@ function HeroCanvas() {
   useEffect(() => {
     for (let i = 1; i <= frameCount; i++) {
       const img = new Image();
-      img.src = `/frame_${String(i).padStart(3, "0")}.jpg`;
-      img.onload = () => console.log(`Loaded frame_${String(i).padStart(3, "0")}.jpg`);
-      img.onerror = () => console.error(`Missing frame_${String(i).padStart(3, "0")}.jpg`);
+      img.src = `root/public/frame_${String(i).padStart(4, "0")}.jpeg`;
       images.current.push(img);
     }
   }, []);
