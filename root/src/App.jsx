@@ -77,7 +77,7 @@ function HeroCanvas() {
   useEffect(() => {
     for (let i = 1; i <= frameCount; i++) {
       const img = new Image();
-      img.src = `/assets/frame_${String(i).padStart(4, "0")}.jpeg`;
+      img.src = `/public/frame_${String(i).padStart(4, "0")}.jpeg`;
       images.current.push(img);
     }
   }, []);
