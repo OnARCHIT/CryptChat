@@ -19,8 +19,7 @@ function Navbar() {
     <nav className="fixed top-0 left-0 w-full z-50 bg-black/60 backdrop-blur-md shadow-md">
       <div className="max-w-6xl mx-auto flex items-center justify-between p-4">
         <div className="flex items-center gap-3">
-          <img src="root/public/logo.png" alt="Crypt Chat Logo" className="w-26.5 h-10 rounded" />
-       
+          <img src="/logo.png" alt="Crypt Chat Logo" className="w-28 h-10 rounded" />
         </div>
         <ul className="hidden sm:flex items-center gap-6 text-gray-300 font-medium">
           <li><a href="#news" className="hover:text-green-400">News</a></li>
@@ -48,7 +47,14 @@ function BackgroundMesh() {
   );
 }
 
-// Simple phishing interceptor
+/* 
+  ✅ Backend Integration:
+  The backend (Flask/Express) should expose this API:
+    POST /api/check-phish
+  It should handle:
+    - URL (for url_model)
+    - image (for image_model)
+*/
 async function checkPhish({ url, file, image }) {
   try {
     const formData = new FormData();
@@ -56,15 +62,17 @@ async function checkPhish({ url, file, image }) {
     if (file) formData.append("file", file);
     if (image) formData.append("image", image);
 
-    const res = await fetch("/api/check-phish", {
+    // Call your backend API
+    const res = await fetch("http://localhost:5000/api/check-phish", {
       method: "POST",
-      body: formData
+      body: formData,
     });
+
     const data = await res.json();
-    return data;
+    return data; // { phishing: true/false, type: "url" | "image", confidence: ... }
   } catch (err) {
     console.error("Phishing check failed:", err);
-    return { phishing: false };
+    return { phishing: false, error: "Failed to connect backend" };
   }
 }
 
@@ -77,7 +85,7 @@ function HeroCanvas() {
   useEffect(() => {
     for (let i = 1; i <= frameCount; i++) {
       const img = new Image();
-      img.src = `root/public/frame_${String(i).padStart(4, "0")}.jpeg`;
+      img.src = `/frames/frame_${String(i).padStart(4, "0")}.jpeg`; // ✅ Corrected path
       images.current.push(img);
     }
   }, []);
@@ -113,7 +121,7 @@ function HeroCanvas() {
       start: "top top",
       end: `+=${frameCount * 10}`,
       pin: true,
-      pinSpacing: true
+      pinSpacing: true,
     });
 
     return () => {
@@ -124,10 +132,7 @@ function HeroCanvas() {
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative w-full h-[100vh] overflow-hidden pt-16"
-    >
+    <section ref={sectionRef} className="relative w-full h-[100vh] overflow-hidden pt-16">
       <canvas ref={canvasRef} className="absolute inset-0" />
       <div className="absolute inset-0 pointer-events-none z-10">
         <h2 style={{ top: "15vh" }} className="absolute text-3xl font-bold opacity-80 text-center w-full">
@@ -164,7 +169,7 @@ export default function App() {
         repeat: -1,
         yoyo: true,
         duration: 2,
-        ease: "sine.inOut"
+        ease: "sine.inOut",
       });
     }
   }, [isLoading]);
@@ -197,15 +202,19 @@ export default function App() {
         <section id="news">
           <NewsFeed />
         </section>
+
         <MediaPanel />
+
         <section id="scan" className="space-y-6">
           <h3 className="text-2xl font-semibold">Scan a file or URL</h3>
           <ScanPanel checkPhish={checkPhish} setPhishAlert={setPhishAlert} />
         </section>
+
         <section id="challenge" className="space-y-6">
           <h3 className="text-2xl font-semibold">Phishing Challenge & Gamification</h3>
           <PhishingChallenge />
         </section>
+
         <section id="radar" className="space-y-6">
           <h3 className="text-2xl font-semibold">PhishRadar (Demo)</h3>
           <PhishRadar />
