@@ -11,10 +11,15 @@ export default function App() {
   const [fileResult, setFileResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const backend = "http://localhost:5000"; // change to your deployed backend URL if needed
+  // Automatically use Render URL if deployed
+  const backend =
+    window.location.hostname === "localhost"
+      ? "http://127.0.0.1:5000"
+      : "https://your-backend-service.onrender.com"; // ⬅️ Replace with Render URL after deployment
 
-  // URL SCAN
+  // ===== URL SCAN =====
   const handleUrlScan = async () => {
+    if (!url) return alert("Please enter a URL first!");
     try {
       setLoading(true);
       const res = await axios.post(`${backend}/scan/url`, { url });
@@ -27,7 +32,7 @@ export default function App() {
     }
   };
 
-  // IMAGE SCAN
+  // ===== IMAGE SCAN =====
   const handleImageScan = async () => {
     if (!image) return alert("Please select an image first!");
     try {
@@ -46,7 +51,7 @@ export default function App() {
     }
   };
 
-  // FILE SCAN
+  // ===== FILE SCAN =====
   const handleFileScan = async () => {
     if (!file) return alert("Please select a file first!");
     try {
@@ -66,20 +71,20 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white flex flex-col items-center justify-center p-6">
+    <div className="min-h-screen bg-gray-950 text-white flex flex-col items-center justify-center p-6 space-y-6">
       <motion.h1
-        className="text-4xl font-bold mb-8 text-center"
-        initial={{ y: -30, opacity: 0 }}
+        className="text-4xl font-bold text-center mb-8"
+        initial={{ y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
       >
         🕵️‍♂️ AI Phishing Detector
       </motion.h1>
 
-      {/* URL SCANNER */}
+      {/* === URL SCANNER === */}
       <motion.div
-        className="bg-gray-900 p-6 rounded-2xl shadow-lg w-full max-w-md mb-6"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        className="bg-gray-900 p-6 rounded-2xl shadow-lg w-full max-w-md"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
       >
         <h2 className="text-xl font-semibold mb-3">🔗 URL Scanner</h2>
         <input
@@ -97,7 +102,7 @@ export default function App() {
           {loading ? "Scanning..." : "Scan URL"}
         </button>
         {urlResult && (
-          <p className="mt-3">
+          <p className="mt-3 text-center">
             Result:{" "}
             <span
               className={`font-bold ${
@@ -111,11 +116,11 @@ export default function App() {
         )}
       </motion.div>
 
-      {/* IMAGE SCANNER */}
+      {/* === IMAGE SCANNER === */}
       <motion.div
-        className="bg-gray-900 p-6 rounded-2xl shadow-lg w-full max-w-md mb-6"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        className="bg-gray-900 p-6 rounded-2xl shadow-lg w-full max-w-md"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
       >
         <h2 className="text-xl font-semibold mb-3">🖼️ Image Scanner</h2>
         <input
@@ -132,7 +137,7 @@ export default function App() {
           {loading ? "Scanning..." : "Scan Image"}
         </button>
         {imageResult && (
-          <p className="mt-3">
+          <p className="mt-3 text-center">
             Result:{" "}
             <span
               className={`font-bold ${
@@ -146,11 +151,11 @@ export default function App() {
         )}
       </motion.div>
 
-      {/* FILE SCANNER */}
+      {/* === FILE SCANNER === */}
       <motion.div
         className="bg-gray-900 p-6 rounded-2xl shadow-lg w-full max-w-md"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
       >
         <h2 className="text-xl font-semibold mb-3">📁 File Scanner</h2>
         <input
@@ -166,7 +171,7 @@ export default function App() {
           {loading ? "Scanning..." : "Scan File"}
         </button>
         {fileResult && (
-          <p className="mt-3">
+          <p className="mt-3 text-center">
             Result:{" "}
             <span
               className={`font-bold ${
